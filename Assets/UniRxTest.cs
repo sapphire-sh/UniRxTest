@@ -13,7 +13,10 @@ public class UniRxTest : MonoBehaviour
         // Subscribe2();
         // Subscribe3();
         // Subscribe4();
-        Subscribe5();
+        // Subscribe5();
+        // Subscribe6();
+        // Subscribe7();
+        Subscribe8();
     }
 
     private void Subscribe1()
@@ -27,10 +30,7 @@ public class UniRxTest : MonoBehaviour
             Observable.Interval(TimeSpan.FromSeconds(2))
         )
         .First()
-        .Subscribe(_ =>
-        {
-            Debug.Log(1112);
-        })
+        .Subscribe(_ => Debug.Log(2111), _ => Debug.Log(2112))
         .AddTo(this);
     }
 
@@ -108,5 +108,30 @@ public class UniRxTest : MonoBehaviour
             a.Subscribe(x => Debug.Log(1112 + " " + x)).AddTo(this);
         })
         .AddTo(this);
+    }
+
+    private void Subscribe6()
+    {
+        var a = Observable.ReturnUnit().First();
+
+        a.Subscribe(_ => Debug.Log(1111), _ => Debug.Log(1112));
+
+        Observable.ReturnUnit()
+        .Delay(TimeSpan.FromSeconds(1))
+        .Subscribe(_ => Debug.Log(2111), _ => Debug.Log(2112));
+    }
+
+    private void Subscribe7()
+    {
+        var a = Observable.ReturnUnit()
+        .First()
+        .Subscribe(_ => Debug.Log(1111), _ => Debug.Log(1112));
+    }
+
+    private void Subscribe8()
+    {
+        var a = new Subject<Unit>();
+        a.Subscribe(_ => Debug.Log(1111), _ => Debug.Log(1112));
+        a.OnNext(Unit.Default);
     }
 }
